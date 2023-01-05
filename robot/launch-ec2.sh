@@ -27,7 +27,7 @@ launch_ec2() {
 
     echo -n "Creating Internal DNS Record for $COMPONENT-${ENV}" 
 
-    sed -e "s/IPADDRESS/$PRIVATE_IP/" -e "s/COMPONENT/$COMPONEN-${ENV}/" route53.json  > /tmp/r53.json 
+    sed -e "s/IPADDRESS/$PRIVATE_IP/" -e "s/COMPONENT/$COMPONENT-${ENV}/" route53.json  > /tmp/r53.json 
     aws route53 change-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID --change-batch file:///tmp/r53.json 
 
     echo -n "______ Internal DNS Record for $COMPONENT-${ENV} is completed __________"  
