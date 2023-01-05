@@ -1,6 +1,10 @@
 #!/bin/bash 
 # This script creates the server and the DNS Record
 
+if [ -z "$COMPONENT" ]; then 
+    echo -e "\e[31m Component name is required \n Sample Usage: \n\n\t\t bash launch-ec2.sh componentName \e[0m "
+fi 
+
 COMPONENT=$1 
 HOSTED_ZONE_ID="Z090521761DHPU3HXLNP"
 
