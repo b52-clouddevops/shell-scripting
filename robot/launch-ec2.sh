@@ -19,7 +19,7 @@ echo -e "Security Group ID Used to launch the instance is \e[32m  $SG_ID \e[0m"
 
 launch_ec2() { 
 
-    echo"______ $COMPONENT launch is in progress ______"
+    echo "______ $COMPONENT launch is in progress ______"
 
     PRIVATE_IP=$(aws ec2 run-instances --image-id ${AMI_ID} --instance-type t3.micro  --security-group-ids ${SG_ID} --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${COMPONENT}-${ENV}}]" | jq '.Instances[].PrivateIpAddress' | sed -e 's/"//g')
 
