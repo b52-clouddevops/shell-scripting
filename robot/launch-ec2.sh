@@ -1,14 +1,14 @@
 #!/bin/bash 
 # This script creates the server and the DNS Record
 
+COMPONENT=$1 
+ENV=$2
+HOSTED_ZONE_ID="Z090521761DHPU3HXLNP"
+
 if [ -z "$COMPONENT" ]; then 
     echo -e "\e[31m Component name is required \n Sample Usage: \n\n\t\t bash launch-ec2.sh componentName envName  \e[0m"
     exit 1
 fi 
-
-COMPONENT=$1 
-ENV=$2
-HOSTED_ZONE_ID="Z090521761DHPU3HXLNP"
 
 # AMI_ID="ami-00ff427d936335825"
 AMI_ID=$(aws ec2 describe-images  --filters "Name=name,Values=DevOps-LabImage-CentOS7" --region us-east-1 | jq .Images[].ImageId | sed -e 's/"//g')
@@ -19,7 +19,7 @@ echo -e "Security Group ID Used to launch the instance is \e[32m  $SG_ID \e[0m"
 
 launch_ec2() { 
 
-    echo ______ $COMPONENT launch is in progress ______ 
+    echo"______ $COMPONENT launch is in progress ______"
 
     PRIVATE_IP=$(aws ec2 run-instances --image-id ${AMI_ID} --instance-type t3.micro  --security-group-ids ${SG_ID} --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${COMPONENT}-${ENV}}]" | jq '.Instances[].PrivateIpAddress' | sed -e 's/"//g')
 
@@ -30,7 +30,7 @@ launch_ec2() {
     sed -e "s/IPADDRESS/$PRIVATE_IP/" -e "s/COMPONENT/$COMPONEN-${ENV}/" route53.json  > /tmp/r53.json 
     aws route53 change-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID --change-batch file:///tmp/r53.json 
 
-    echo -n " ______ Internal DNS Record for $COMPONENT-${ENV} is completed __________"  
+    echo -n "______ Internal DNS Record for $COMPONENT-${ENV} is completed __________"  
 
 }
 
