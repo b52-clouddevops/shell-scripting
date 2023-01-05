@@ -10,9 +10,10 @@ SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=b52-al
 
 echo -e "AMI ID Used to launch the instance is \e[32m $AMI_ID \e[0m "
 echo -e "Security Group ID Used to launch the instance is \e[32m  $SG_ID \e[0m"
-echo "******______ $COMPONENT launch is in progress ______******"
 
-launch_ec2() {
+launch_ec2() { 
+
+    echo ______ $COMPONENT launch is in progress ______ 
 
     PRIVATE_IP=$(aws ec2 run-instances --image-id ${AMI_ID} --instance-type t3.micro  --security-group-ids ${SG_ID} --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${COMPONENT}}]" | jq '.Instances[].PrivateIpAddress' | sed -e 's/"//g')
 
@@ -23,7 +24,7 @@ launch_ec2() {
     sed -e "s/IPADDRESS/$PRIVATE_IP/" -e "s/COMPONENT/$COMPONENT/" route53.json  > /tmp/r53.json 
     aws route53 change-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID --change-batch file:///tmp/r53.json 
 
-    echo -n " ______****** Internal DNS Record for $COMPONENT is completed ******__________"  
+    echo -n " ______ Internal DNS Record for $COMPONENT is completed __________"  
 
 }
 
