@@ -34,7 +34,7 @@ for component in catalogue cart user shipping payment; do     # for loop
     sed -i -e "/$component/s/localhost/$component.roboshop.internal/"  /etc/nginx/default.d/roboshop.conf  
     stat $? 
 done 
-
+ 
 echo -n "Retarting Nignx :"
 systemctl enable nginx    &>> "${LOFGILE}"
 systemctl restart nginx   &>> "${LOFGILE}"
