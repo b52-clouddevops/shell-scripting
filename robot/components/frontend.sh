@@ -35,7 +35,7 @@ for component in catalogue cart user shipping payment; do     # for loop
     stat $? 
 done 
  
-echo -n "Retarting Nignx :"
+echo -n "Restarting Nignx :"
 systemctl enable nginx    &>> "${LOFGILE}"
 systemctl restart nginx   &>> "${LOFGILE}"
 stat $?
